@@ -1,24 +1,25 @@
 package personne;
 
-import java.io.Serializable;
 import java.util.Objects;
+import java.io.Serializable;
 
 public class Personne implements Serializable {
-
+    private static final long serialVersionUID = 1L; // Ajoutez un UID pour la version de la classe
     private String nom;
     private String prenom;
     private String club;
     private String mail;
-    private boolean payemmentEnCours;
+    private boolean payementEnCours;
 
     public Personne() {
     }
-    public Personne(String nom, String prenom, String club, String mail, boolean payemmentEnCours) {
+
+    public Personne(String nom, String prenom, String club, String mail, boolean payementEnCours) {
         this.nom = Objects.requireNonNull(nom);
         this.prenom = Objects.requireNonNull(prenom);
         this.club = club;
         this.mail = mail;
-        this.payemmentEnCours = payemmentEnCours;
+        this.payementEnCours = payementEnCours;
     }
 
     @Override
@@ -28,7 +29,7 @@ public class Personne implements Serializable {
                 ", prenom='" + prenom + '\'' +
                 ", club='" + club + '\'' +
                 ", mail='" + mail + '\'' +
-                ", payemmentEnCours=" + payemmentEnCours +
+                ", payemmentEnCours=" + payementEnCours +
                 '}';
     }
 
@@ -65,10 +66,10 @@ public class Personne implements Serializable {
     }
 
     public boolean isPayemmentEnCours() {
-        return payemmentEnCours;
+        return payementEnCours;
     }
 
     public void setPayemmentEnCours(boolean payemmentEnCours) {
-        this.payemmentEnCours = payemmentEnCours;
+        this.payementEnCours = payemmentEnCours;
     }
 }
