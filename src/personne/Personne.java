@@ -1,6 +1,7 @@
 package personne;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Personne implements Serializable {
 
@@ -13,8 +14,8 @@ public class Personne implements Serializable {
     public Personne() {
     }
     public Personne(String nom, String prenom, String club, String mail, boolean payemmentEnCours) {
-        this.nom = nom;
-        this.prenom = prenom;
+        this.nom = Objects.requireNonNull(nom);
+        this.prenom = Objects.requireNonNull(prenom);
         this.club = club;
         this.mail = mail;
         this.payemmentEnCours = payemmentEnCours;

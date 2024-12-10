@@ -2,19 +2,14 @@ package inscription;
 
 import personne.Personne;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Scanner;
 
-public class Inscription {
-    static ArrayList<Personne> inscrit = new ArrayList<>();
+public class Inscription implements Serializable {
+    private static final long serialVersionUID = 1L;
+    private static final String FILE_NAME = "ListeInscrit.ser";
+    private ArrayList<Personne> inscrit = new ArrayList<>();
 
     public void read() {
         Scanner scanner = new Scanner(System.in);
@@ -55,7 +50,7 @@ public class Inscription {
         scanner.close();
     }
 
-    static void afficherMenu() {
+    private static void afficherMenu() {
         System.out.println("\n--- Menu Gestion des eleves ---");
         System.out.println("1. Ajouter un eleve");
         System.out.println("2. Lister les eleves");
@@ -67,8 +62,7 @@ public class Inscription {
         System.out.print("Votre choix : ");
     }
 
-    static void ajouterEleve(Scanner scanner) {
-
+    private void ajouterEleve(Scanner scanner) {
         System.out.print("Entrez le nom de l'eleve: ");
         String nom = scanner.nextLine().trim();
         if (nom.isEmpty() || existeNom(nom)) {
@@ -95,179 +89,134 @@ public class Inscription {
         System.out.print("Confirmer l'ajout ? (oui/non): ");
         if (scanner.nextLine().equalsIgnoreCase("oui")) {
             inscrit.add(nouvelEleve);
+            sauvegarder();
             System.out.println("Eleve ajouté avec succès.");
         } else {
             System.out.println("Ajout annulé.");
         }
     }
 
-    static void listerEleve() {
+    private void listerEleve() {
         if (inscrit.isEmpty()) {
-            System.out.println("Aucun eleve enregistré.");
-            return;
-        }
-        for (Personne inscrits : inscrit) {
-            System.out.println("Nom: " + inscrits.getNom() + ", Prenom: " + inscrits.getPrenom() + "Club: "
-                    + inscrits.getClub() + ", Email: " + inscrits.getMail());
-        }
-    }
-
-    static void rechercherEleveParPrenom(Scanner scanner) {
-        if (inscrit.isEmpty()) {
-            System.out.println("Aucun eleve enregistré.");
-            return;
-        }
-
-        System.out.print("Entrez le prenom de l'eleve: ");
-        String prenom = scanner.nextLine().trim();
-
-        Personne p = trouverEleveParPrenom(prenom);
-        if (p != null) {
-            System.out.println(p);
+            System.out.println("Aucun élève inscrit.");
         } else {
-            System.out.println("Aucun eleve trouvé avec ce prenom.");
+            System.out.println("Liste des élèves inscrits :");
+            for (Personne eleve : inscrit) {
+                System.out.println(eleve);
+            }
         }
     }
 
-    static void rechercherEleveParNom(Scanner scanner) {
-        if (inscrit.isEmpty()) {
-            System.out.println("Aucun eleve enregistré.");
-            return;
+    private void rechercherEleveParPrenom(Scanner scanner) {
+        System.out.print("Entrez le prénom de l'élève à rechercher : ");
+        String prenom = scanner.nextLine();
+        for (Personne eleve : inscrit) {
+            if (eleve.getPrenom().equalsIgnoreCase(prenom)) {
+                System.out.println(eleve);
+                return;
+            }
         }
-
-        System.out.print("Entrez le nom de l'eleve: ");
-        String nom = scanner.nextLine().trim();
-
-        Personne p = trouverEleveParNom(nom);
-        if (p != null) {
-            System.out.println(p);
-        } else {
-            System.out.println("Aucun eleve trouvé avec ce nom.");
-        }
+        System.out.println("Aucun élève trouvé avec ce prénom.");
     }
 
-    static void modifierEleve(Scanner scanner) {
-        if (inscrit.isEmpty()) {
-            System.out.println("Aucun eleve enregistré.");
-            return;
+    private void rechercherEleveParNom(Scanner scanner) {
+        System.out.print("Entrez le nom de l'élève à rechercher : ");
+        String nom = scanner.nextLine();
+        for (Personne eleve : inscrit) {
+            if (eleve.getNom().equalsIgnoreCase(nom)) {
+                System.out.println(eleve);
+                return;
+            }
         }
+        System.out.println("Aucun élève trouvé avec ce nom.");
+    }
 
-        System.out.print("Entrez le nom de l'eleve à modifier: ");
-        String nom = scanner.nextLine().trim();
-
-        Personne p = trouverEleveParNom(nom);
-        if (p != null) {
-            System.out.println(p);
-
-            int choix = -1;
-            while (choix != 0) {
-                System.out.println("Que souhaitez-vous modifier ?");
-                System.out.println("1. Nom\n2. Prenom\n3. Clubl\n4. mail\n5.payement\n0. Annuler");
-
-                if (scanner.hasNextInt()) {
-                    choix = scanner.nextInt();
+    private void modifierEleve(Scanner scanner) {
+        System.out.print("Entrez le nom de l'élève à modifier : ");
+        String nom = scanner.nextLine();
+        for (Personne eleve : inscrit) {
+            if (eleve.getNom().equalsIgnoreCase(nom)) {
+                boolean modificationTerminee = false;
+                while (!modificationTerminee) {
+                    System.out.println("Que souhaitez-vous modifier ?");
+                    System.out.println("1. Prénom");
+                    System.out.println("2. Club");
+                    System.out.println("3. Adresse email");
+                    System.out.println("4. Paiement");
+                    System.out.println("0. Terminer et sauvegarder");
+                    System.out.print("Votre choix : ");
+                    int choix = scanner.nextInt();
                     scanner.nextLine();
 
                     switch (choix) {
                         case 1:
-                            System.out.print("Entrez le nouveau nom: ");
-                            String nouveauNom = scanner.nextLine().trim();
-                            if (!existeNom(nouveauNom)) {
-                                p.setNom(nouveauNom);
-                                System.out.println("Nom mis à jour.");
-                            } else {
-                                System.out.println("Nom déjà utilisé.");
-                            }
+                            System.out.print("Entrez le nouveau prénom : ");
+                            eleve.setPrenom(scanner.nextLine());
                             break;
                         case 2:
-                            System.out.print("Entrez le nouveau prenom: ");
-                            p.setPrenom(scanner.nextLine());
-                            System.out.println("Prenom mis à jour.");
+                            System.out.print("Entrez le nouveau club : ");
+                            eleve.setClub(scanner.nextLine());
                             break;
                         case 3:
-                            System.out.print("Entrez le nouveau club: ");
-                            p.setClub(scanner.nextLine());
-                            System.out.println("Club mis à jour.");
+                            System.out.print("Entrez la nouvelle adresse email : ");
+                            eleve.setMail(scanner.nextLine());
                             break;
                         case 4:
-                            System.out.print("Entrez le nouveau email: ");
-                            p.setMail(scanner.nextLine());
-                            System.out.println("Email mis à jour.");
-                            break;
-                        case 5:
-                            System.out.print("Attendez-vous un payement ? (oui/non): ");
-                            p.setPayemmentEnCours(scanner.nextLine().equalsIgnoreCase("oui"));
-                            System.out.println("Statut du payement mis à jour.");
+                            System.out.print("Attendez-vous un paiement ? (oui/non) : ");
+                            eleve.setPayemmentEnCours(scanner.nextLine().equalsIgnoreCase("oui"));
                             break;
                         case 0:
-                            System.out.println("Modification annulée.");
-                            return;
+                            modificationTerminee = true;
+                            break;
                         default:
-                            System.out.println("Choix invalide, veuillez réessayer.");
+                            System.out.println("Choix invalide. Réessayez.");
                     }
-                } else {
-                    System.out.println("Entrée non valide, veuillez entrer un nombre.");
-                    scanner.nextLine();
                 }
-            }
-        } else {
-            System.out.println("Aucun eleve trouvé avec ce numéro.");
-        }
-    }
-
-    static void supprimerEleve(Scanner scanner) {
-        if (inscrit.isEmpty()) {
-            System.out.println("Aucun eleve enregistré.");
-            return;
-        }
-
-        System.out.print("Entrez le nom de l'eleve à supprimer: ");
-        String nom = scanner.nextLine().trim();
-
-        Personne p = trouverEleveParNom(nom);
-        if (p != null) {
-            if (p.isPayemmentEnCours()) {
-                System.out.println("Impossible de supprimer un eleve avec un payement en cours.");
-            } else {
-                System.out.println(p);
-                System.out.print("Confirmer la suppression ? (oui/non): ");
-                if (scanner.nextLine().equalsIgnoreCase("oui")) {
-                    inscrit.remove(p);
-                    System.out.println("eleve supprimé.");
-                } else {
-                    System.out.println("Suppression annulée.");
-                }
-            }
-        } else {
-            System.out.println("Aucun eleve trouvé avec ce numéro.");
-        }
-    }
-
-    static Personne trouverEleveParPrenom(String prenom) {
-        for (Personne p : inscrit) {
-            if (Objects.equals(p.getPrenom(), prenom)) {
-                return p;
+                sauvegarder();
+                System.out.println("Élève modifié avec succès.");
+                return;
             }
         }
-        return null;
+        System.out.println("Aucun élève trouvé avec ce nom.");
     }
 
-    static Personne trouverEleveParNom(String nom) {
-        for (Personne p : inscrit) {
-            if (p.getNom().equalsIgnoreCase(nom)) {
-                return p;
+    private void supprimerEleve(Scanner scanner) {
+        System.out.print("Entrez le nom de l'élève à supprimer : ");
+        String nom = scanner.nextLine();
+        for (Personne eleve : inscrit) {
+            if (eleve.getNom().equalsIgnoreCase(nom)) {
+                inscrit.remove(eleve);
+                sauvegarder();
+                System.out.println("Élève supprimé avec succès.");
+                return;
             }
         }
-        return null;
+        System.out.println("Aucun élève trouvé avec ce nom.");
     }
 
-    static boolean existeNom(String nom) {
-        for (Personne p : inscrit) {
-            if (p.getNom().equalsIgnoreCase(nom)) {
+    private boolean existeNom(String nom) {
+        for (Personne eleve : inscrit) {
+            if (eleve.getNom().equalsIgnoreCase(nom)) {
                 return true;
             }
         }
         return false;
     }
 
+    private void sauvegarder() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_NAME))) {
+            oos.writeObject(inscrit);
+        } catch (IOException e) {
+            System.err.println("Erreur lors de la sauvegarde : " + e.getMessage());
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public void charger() {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FILE_NAME))) {
+            inscrit = (ArrayList<Personne>) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Aucune donnée existante n'a été trouvée. Une nouvelle liste sera créée.");
+        }
+    }
 }
