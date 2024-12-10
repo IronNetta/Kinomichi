@@ -52,7 +52,7 @@ L'application se lance dans un terminal avec un menu interactif. Vous pouvez nav
 1. Ajouter un élève : Fournissez les informations demandées.
 2. Lister les élèves : Affiche tous les élèves inscrits.
 3. Rechercher un élève : Entrez un nom ou un prénom pour rechercher.
-4. Modifier un élève : (à implémenter).
+4. Modifier un élève : Fournissez les informations demandées.
 5. Supprimer un élève : Trouvez un élève par nom et supprimez-le.
 6. Quitter : Ferme l'application.
 
