@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.io.Serializable;
 
 public class Personne implements Serializable {
-    private static final long serialVersionUID = 1L; // Ajoutez un UID pour la version de la classe
+    private static final long serialVersionUID = 1L;
     private String nom;
     private String prenom;
     private String club;
@@ -24,13 +24,13 @@ public class Personne implements Serializable {
 
     @Override
     public String toString() {
-        return "Personne{" +
+        return
                 "nom='" + nom + '\'' +
                 ", prenom='" + prenom + '\'' +
                 ", club='" + club + '\'' +
                 ", mail='" + mail + '\'' +
-                ", payemmentEnCours=" + payementEnCours +
-                '}';
+                ", payemmentEnCours=" + payementEnCours
+                ;
     }
 
     public String getNom() {

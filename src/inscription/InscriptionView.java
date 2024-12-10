@@ -31,12 +31,24 @@ public class InscriptionView {
         String prenom = scanner.nextLine();
         System.out.print("Club : ");
         String club = scanner.nextLine();
-        System.out.print("Email : ");
-        String mail = scanner.nextLine();
-        System.out.print("Paiement (oui/non) : ");
+        String mail;
+        mail = getString();
+        System.out.print("Paiement en cour? (oui/non) : ");
         boolean paiement = scanner.nextLine().equalsIgnoreCase("oui");
 
         return new Personne(nom, prenom, club, mail, paiement);
+    }
+
+    private String getString() {
+        String mail;
+        do {
+            System.out.print("Email : ");
+            mail = scanner.nextLine();
+            if (!mail.matches("^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$")) {
+                System.out.println("Format de l'email invalide. Exemple : jeandupont@monmail.com");
+            }
+        } while (!mail.matches("^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$"));
+        return mail;
     }
 
     public void afficherEleve(Personne eleve) {
