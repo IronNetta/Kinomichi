@@ -21,7 +21,13 @@ public class InscriptionView {
     }
 
     public int lireChoix() {
-        return scanner.nextInt();
+        while (true) {
+            try {
+                return Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Veuillez entrer un nombre valide.");
+            }
+        }
     }
 
     public Personne lireNouvelEleve() {
