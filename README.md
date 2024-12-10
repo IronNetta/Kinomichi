@@ -31,8 +31,8 @@ Une application Java simple pour gérer une liste d'élèves, comprenant des fon
 
 1. Clonez ce repository :
    ```bash
-   git clone https://github.com/votre-utilisateur/gestion-eleves.git
-   cd gestion-eleves
+   git clone https://github.com/IronNetta/Kinomichi.git
+   cd Kinomichi
    ```
 
 2. Compilez le projet :
@@ -42,7 +42,7 @@ Une application Java simple pour gérer une liste d'élèves, comprenant des fon
 
 3. Exécutez le programme :
    ```bash
-   java -cp bin InscriptionMain
+   java -cp bin Main
    ```
 
 ## Utilisation
