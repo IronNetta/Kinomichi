@@ -5,6 +5,7 @@ import personne.Personne;
 import java.util.Scanner;
 
 public class InscriptionView {
+    private static final String EMAIL_REGEX = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
     private final Scanner scanner = new Scanner(System.in);
 
     public void afficherMenu() {
@@ -32,23 +33,27 @@ public class InscriptionView {
         System.out.print("Club : ");
         String club = scanner.nextLine();
         String mail;
-        mail = getString();
+        mail = getEmail();
         System.out.print("Paiement en cour? (oui/non) : ");
         boolean paiement = scanner.nextLine().equalsIgnoreCase("oui");
 
         return new Personne(nom, prenom, club, mail, paiement);
     }
 
-    private String getString() {
-        String mail;
+    private boolean isValidEmail(String email) {
+        return email.matches(EMAIL_REGEX);
+    }
+
+    private String getEmail() {
+        String email;
         do {
             System.out.print("Email : ");
-            mail = scanner.nextLine();
-            if (!mail.matches("^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$")) {
-                System.out.println("Format de l'email invalide. Exemple : jeandupont@monmail.com");
+            email = scanner.nextLine();
+            if (!isValidEmail(email)) {
+                System.out.println("L'email '" + email + "' est invalide. Exemple : jeandupont@monmail.com");
             }
-        } while (!mail.matches("^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$"));
-        return mail;
+        } while (!isValidEmail(email));
+        return email;
     }
 
     public void afficherEleve(Personne eleve) {
