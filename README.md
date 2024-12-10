@@ -62,11 +62,11 @@ Les données sont automatiquement sauvegardées dans un fichier texte pour une u
 
 ```
 src/
-├── Inscription.java       # Modèle de gestion des élèves
-├── InscriptionView.java   # Interface utilisateur
+├── Inscription.java           # Modèle de gestion des élèves
+├── InscriptionView.java       # Interface utilisateur
 ├── InscriptionController.java # Logique métier et interactions
-├── Personne.java          # Classe représentant un élève
-├── InscriptionMain.java   # Point d'entrée de l'application
+├── Personne.java              # Classe représentant un élève
+├── Main.java                  # Point d'entrée de l'application
 ```
 
 ## Améliorations possibles
