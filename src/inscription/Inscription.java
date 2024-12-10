@@ -4,9 +4,11 @@ import personne.Personne;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
 
 public class Inscription {
-    private static final String FILE_NAME = "ListeInscrit.txt";
+    private static final String FILE_NAME = "ListeInscrit.json";
     private ArrayList<Personne> inscrit = new ArrayList<>();
 
     public void ajouterEleve(Personne eleve) {
@@ -14,17 +16,14 @@ public class Inscription {
         sauvegarder();
     }
 
-    public ArrayList<Personne> listerEleves() {
-        return inscrit;
-    }
+    public List<Personne> listerEleves() {
+    return new ArrayList<>(inscrit);
+}
 
-    public Personne rechercherParNom(String nom) {
-        return inscrit.stream().filter(e -> e.getNom().equalsIgnoreCase(nom)).findFirst().orElse(null);
-    }
+public Personne rechercherEleve(Predicate<Personne> condition) {
+    return inscrit.stream().filter(condition).findFirst().orElse(null);
+}
 
-    public Personne rechercherParPrenom(String prenom) {
-        return inscrit.stream().filter(e -> e.getPrenom().equalsIgnoreCase(prenom)).findFirst().orElse(null);
-    }
 
     public void supprimerEleve(Personne eleve) {
         inscrit.remove(eleve);

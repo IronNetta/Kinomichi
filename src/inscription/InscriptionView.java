@@ -83,4 +83,14 @@ public class InscriptionView {
         System.out.print("Entrez le prénom : ");
         return scanner.nextLine();
     }
+
+    public String lireText(String champ) {
+        System.out.print("Entrez le nouveau " + champ + " : ");
+        return scanner.nextLine();
+    }
+
+    public boolean lireBoolean(String message) {
+        System.out.print(message + " (oui/non) : ");
+        return scanner.nextLine().equalsIgnoreCase("oui");
+    }
 }
