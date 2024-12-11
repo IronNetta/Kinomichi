@@ -2,15 +2,18 @@ package inscription;
 
 import java.util.List;
 
+import activite.ActiviteController;
 import personne.Personne;
 
 public class InscriptionController {
     private final Inscription model;
     private final InscriptionView view;
+    private final ActiviteController activiteController;
 
-    public InscriptionController(Inscription model, InscriptionView view) {
+    public InscriptionController(Inscription model, InscriptionView view, ActiviteController activiteController) {
         this.model = model;
         this.view = view;
+        this.activiteController = activiteController;
     }
 
     public void demarrer() {
@@ -28,10 +31,15 @@ public class InscriptionController {
                 case 4 -> rechercherParNom();
                 case 5 -> modifierEleve();
                 case 6 -> supprimerEleve();
+                case 7 -> gererActivites();
                 case 0 -> view.afficherMessage("Fermeture de l'application.");
                 default -> view.afficherMessage("Choix invalide. Réessayez.");
             }
         } while (choix != 0);
+    }
+
+    private void gererActivites() {
+        activiteController.demarrer();
     }
 
     public void modifierEleve() {
@@ -92,8 +100,8 @@ public class InscriptionController {
     }
 
 
-    private void ajouterEleve() {
-        Personne nouvelEleve = view.lireNouvelEleve();
+    public void ajouterEleve() {
+        Personne nouvelEleve = view.lireNouvelEleve(activiteController);
         model.ajouterEleve(nouvelEleve);
         view.afficherMessage("Élève ajouté avec succès.");
     }

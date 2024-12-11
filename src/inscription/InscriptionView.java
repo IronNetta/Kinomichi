@@ -1,5 +1,7 @@
 package inscription;
 
+import activite.Activite;
+import activite.ActiviteController;
 import personne.Personne;
 
 import java.util.Scanner;
@@ -16,6 +18,7 @@ public class InscriptionView {
         System.out.println("4. Rechercher un élève par nom");
         System.out.println("5. Modifier un élève");
         System.out.println("6. Supprimer un élève");
+        System.out.println("7. Gérer les activités");
         System.out.println("0. Quitter");
         System.out.print("Votre choix : ");
     }
@@ -30,20 +33,41 @@ public class InscriptionView {
         }
     }
 
-    public Personne lireNouvelEleve() {
-        scanner.nextLine();
+    public Personne lireNouvelEleve(ActiviteController activiteController) {
         System.out.print("Nom : ");
         String nom = scanner.nextLine();
         System.out.print("Prénom : ");
         String prenom = scanner.nextLine();
         System.out.print("Club : ");
         String club = scanner.nextLine();
-        String mail;
-        mail = getEmail();
+        String mail = getEmail();
         System.out.print("Paiement en cour? (oui/non) : ");
         boolean paiement = scanner.nextLine().equalsIgnoreCase("oui");
 
-        return new Personne(nom, prenom, club, mail, paiement);
+        Personne nouvelEleve = new Personne(nom, prenom, club, mail, paiement);
+
+        // Ajouter des activités
+        boolean ajoutActivites = true;
+        while (ajoutActivites) {
+            System.out.println("Voulez-vous ajouter une activité existante ? (oui/non) : ");
+            if (!scanner.nextLine().equalsIgnoreCase("oui")) {
+                ajoutActivites = false;
+                break;
+            }
+
+            activiteController.getActiviteView().afficherActivites(activiteController.listerActivites());
+            System.out.print("Nom de l'activité : ");
+            String nomActivite = scanner.nextLine();
+            Activite activite = activiteController.rechercherActivite(nomActivite);
+
+            if (activite != null) {
+                nouvelEleve.ajouterActivite(activite);
+            } else {
+                System.out.println("Activité introuvable.");
+            }
+        }
+
+        return nouvelEleve;
     }
 
     private boolean isValidEmail(String email) {

@@ -1,4 +1,4 @@
-package inscription;
+package personne;
 
 public class Club {
     private String clubName;

@@ -1,5 +1,9 @@
 package personne;
 
+import activite.Activite;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.io.Serializable;
 
@@ -10,6 +14,7 @@ public class Personne implements Serializable {
     private String club;
     private String mail;
     private boolean payementEnCours;
+    private List<Activite> activites = new ArrayList<>();
 
     public Personne() {
     }
@@ -22,17 +27,28 @@ public class Personne implements Serializable {
         this.payementEnCours = payementEnCours;
     }
 
+    public void ajouterActivite(Activite activite) {
+        activites.add(activite);
+    }
+
     @Override
     public String toString() {
-        return
+        return "Personne{" +
                 "nom='" + nom + '\'' +
                 ", prenom='" + prenom + '\'' +
                 ", club='" + club + '\'' +
                 ", mail='" + mail + '\'' +
-                ", payemmentEnCours=" + payementEnCours
-                ;
+                ", paiementEnCours=" + payementEnCours +
+                ", activites=" + activites +
+                '}';
     }
 
+    public void setActivites(List<Activite> activites) {
+        this.activites = activites;
+    }
+    public List<Activite> getActivites() {
+        return activites;
+    }
     public String getNom() {
         return nom;
     }
