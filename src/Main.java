@@ -13,7 +13,7 @@ public class Main {
 
         Inscription inscriptionModel = new Inscription();
         InscriptionView inscriptionView = new InscriptionView();
-        InscriptionController inscriptionController = new InscriptionController(inscriptionModel, inscriptionView, activiteController);
+        InscriptionController inscriptionController = new InscriptionController(inscriptionModel, inscriptionView, activiteController,activiteModel);
 
         inscriptionController.demarrer();
     }

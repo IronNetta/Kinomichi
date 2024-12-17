@@ -55,7 +55,7 @@ public class InscriptionView {
                 break;
             }
 
-            activiteController.getActiviteView().afficherActivites(activiteController.listerActivites());
+            activiteController.listerActivites();
             System.out.print("Nom de l'activité : ");
             String nomActivite = scanner.nextLine();
             Activite activite = activiteController.rechercherActivite(nomActivite);

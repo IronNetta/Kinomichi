@@ -2,22 +2,27 @@ package inscription;
 
 import java.util.List;
 
+import activite.Activite;
 import activite.ActiviteController;
+import activite.ActiviteView;
 import personne.Personne;
 
 public class InscriptionController {
     private final Inscription model;
     private final InscriptionView view;
     private final ActiviteController activiteController;
+    private final Activite activiteModel;
 
-    public InscriptionController(Inscription model, InscriptionView view, ActiviteController activiteController) {
+    public InscriptionController(Inscription model, InscriptionView view, ActiviteController activiteController, Activite activiteModel) {
         this.model = model;
         this.view = view;
         this.activiteController = activiteController;
+        this.activiteModel = activiteModel;
     }
 
     public void demarrer() {
         model.charger();
+        activiteModel.charger();
 
         int choix;
         do {

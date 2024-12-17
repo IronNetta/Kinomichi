@@ -1,9 +1,15 @@
 package activite;
 
-import java.io.Serializable;
+import personne.Personne;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Activite implements Serializable {
     private static final long serialVersionUID = 1L;
+    private static final String FILE_NAME = "Activite.json";
+    private List<Activite> activites = new ArrayList<>();
 
     private String nom;
     private int heuresStage;
@@ -46,6 +52,24 @@ public class Activite implements Serializable {
                 ", repasSoir=" + repasSoir +
                 ", estWeekend=" + estWeekend +
                 '}';
+    }
+
+    public void sauvegarder() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_NAME))) {
+            oos.writeObject(activites);
+            oos.flush();
+        } catch (IOException e) {
+            System.out.println("Erreur lors de la sauvegarde : " + e.getMessage());
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public void charger() {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FILE_NAME))) {
+            activites = (ArrayList<Activite>) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Aucune donnée existante. Nouvelle liste créée.");
+        }
     }
 }
 

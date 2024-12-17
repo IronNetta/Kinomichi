@@ -21,6 +21,8 @@ public class ActiviteController {
 
     public void ajouterActivite(Activite activite) {
         activites.add(activite);
+        model.sauvegarder();
+        System.out.println(activite);
     }
 
     public List<Activite> listerActivites() {
