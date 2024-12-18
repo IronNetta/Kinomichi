@@ -19,6 +19,7 @@ public class InscriptionView {
         System.out.println("5. Modifier un élève");
         System.out.println("6. Supprimer un élève");
         System.out.println("7. Gérer les activités");
+        System.out.println("8. Gérer les tarifs");
         System.out.println("0. Quitter");
         System.out.print("Votre choix : ");
     }
@@ -116,5 +117,8 @@ public class InscriptionView {
     public boolean lireBoolean(String message) {
         System.out.print(message + " (oui/non) : ");
         return scanner.nextLine().equalsIgnoreCase("oui");
+    }
+
+    public void afficherMenuModificationEleve(Personne eleve) {
     }
 }

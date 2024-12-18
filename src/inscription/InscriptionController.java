@@ -6,23 +6,32 @@ import activite.Activite;
 import activite.ActiviteController;
 import activite.ActiviteView;
 import personne.Personne;
+import tarif.TarifController;
+import tarif.TarifView;
 
 public class InscriptionController {
     private final Inscription model;
     private final InscriptionView view;
     private final ActiviteController activiteController;
-    private final Activite activiteModel;
+    private final TarifController tarifController;
 
-    public InscriptionController(Inscription model, InscriptionView view, ActiviteController activiteController, Activite activiteModel) {
+    public InscriptionController(
+            Inscription model,
+            InscriptionView view,
+            ActiviteController activiteController,
+            TarifController tarifController
+    ) {
+        if (model == null || view == null || activiteController == null || tarifController == null) {
+            throw new IllegalArgumentException("Les dépendances ne peuvent pas être nulles.");
+        }
         this.model = model;
         this.view = view;
         this.activiteController = activiteController;
-        this.activiteModel = activiteModel;
+        this.tarifController = tarifController;
     }
 
     public void demarrer() {
         model.charger();
-        activiteModel.charger();
 
         int choix;
         do {
@@ -37,6 +46,7 @@ public class InscriptionController {
                 case 5 -> modifierEleve();
                 case 6 -> supprimerEleve();
                 case 7 -> gererActivites();
+                case 8 -> gererTarifs();
                 case 0 -> view.afficherMessage("Fermeture de l'application.");
                 default -> view.afficherMessage("Choix invalide. Réessayez.");
             }
@@ -47,63 +57,9 @@ public class InscriptionController {
         activiteController.demarrer();
     }
 
-    public void modifierEleve() {
-        String nom = view.lireNom();
-        Personne eleve = model.rechercherEleve(e -> e.getNom().equalsIgnoreCase(nom));
-
-        if (eleve == null) {
-            view.afficherMessage("Aucun élève trouvé avec ce nom.");
-            return;
-        }
-
-        boolean modificationTerminee = false;
-        while (!modificationTerminee) {
-            view.afficherMessage("\n--- Modification de l'élève ---");
-            view.afficherMessage(eleve.toString());
-            view.afficherMessage("Que souhaitez-vous modifier ?");
-            view.afficherMessage("1. Nom");
-            view.afficherMessage("2. Prénom");
-            view.afficherMessage("3. Club");
-            view.afficherMessage("4. Adresse email");
-            view.afficherMessage("5. Paiement");
-            view.afficherMessage("0. Terminer et sauvegarder");
-
-            int choix = view.lireChoix();
-            switch (choix) {
-                case 1 -> {
-                    String nouveauNom = view.lireNom();
-                    eleve.setNom(nouveauNom);
-                    view.afficherMessage("Nom modifié avec succès.");
-                }
-                case 2 -> {
-                    String nouveauPrenom = view.lirePrenom();
-                    eleve.setPrenom(nouveauPrenom);
-                    view.afficherMessage("Prénom modifié avec succès.");
-                }
-                case 3 -> {
-                    String nouveauClub = view.lireText("club");
-                    eleve.setClub(nouveauClub);
-                    view.afficherMessage("Club modifié avec succès.");
-                }
-                case 4 -> {
-                    String nouveauEmail = view.lireText("email");
-                    eleve.setMail(nouveauEmail);
-                    view.afficherMessage("Email modifié avec succès.");
-                }
-                case 5 -> {
-                    boolean paiement = view.lireBoolean("Attendez-vous un paiement ?");
-                    eleve.setPayemmentEnCours(paiement);
-                    view.afficherMessage("Paiement modifié avec succès.");
-                }
-                case 0 -> modificationTerminee = true;
-                default -> view.afficherMessage("Choix invalide. Réessayez.");
-            }
-        }
-
-        model.sauvegarder();
-        view.afficherMessage("Élève modifié et sauvegardé avec succès.");
+    private void gererTarifs() {
+        tarifController.demarrer();
     }
-
 
     public void ajouterEleve() {
         Personne nouvelEleve = view.lireNouvelEleve(activiteController);
@@ -112,15 +68,15 @@ public class InscriptionController {
     }
 
     public void listerEleves() {
-    List<Personne> eleves = model.listerEleves();
-    if (eleves.isEmpty()) {
-        view.afficherMessage("Aucun élève inscrit.");
-    } else {
-        for (int i = 0; i < eleves.size(); i++) {
-            System.out.println((i + 1) + ". " + eleves.get(i));
+        List<Personne> eleves = model.listerEleves();
+        if (eleves.isEmpty()) {
+            view.afficherMessage("Aucun élève inscrit.");
+        } else {
+            for (int i = 0; i < eleves.size(); i++) {
+                System.out.println((i + 1) + ". " + eleves.get(i));
+            }
         }
     }
-}
 
     private void rechercherParPrenom() {
         String prenom = view.lirePrenom();
@@ -143,5 +99,34 @@ public class InscriptionController {
         } else {
             view.afficherMessage("Aucun élève trouvé.");
         }
+    }
+
+    public void modifierEleve() {
+        String nom = view.lireNom();
+        Personne eleve = model.rechercherEleve(e -> e.getNom().equalsIgnoreCase(nom));
+
+        if (eleve == null) {
+            view.afficherMessage("Aucun élève trouvé avec ce nom.");
+            return;
+        }
+
+        boolean modificationTerminee = false;
+        while (!modificationTerminee) {
+            view.afficherMenuModificationEleve(eleve);
+
+            int choix = view.lireChoix();
+            switch (choix) {
+                case 1 -> eleve.setNom(view.lireNom());
+                case 2 -> eleve.setPrenom(view.lirePrenom());
+                case 3 -> eleve.setClub(view.lireText("club"));
+                case 4 -> eleve.setMail(view.lireText("email"));
+                case 5 -> eleve.setPayemmentEnCours(view.lireBoolean("Attendez-vous un paiement ?"));
+                case 0 -> modificationTerminee = true;
+                default -> view.afficherMessage("Choix invalide. Réessayez.");
+            }
+        }
+
+        model.sauvegarder();
+        view.afficherMessage("Élève modifié et sauvegardé avec succès.");
     }
 }
