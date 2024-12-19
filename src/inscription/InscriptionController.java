@@ -2,12 +2,9 @@ package inscription;
 
 import java.util.List;
 
-import activite.Activite;
 import activite.ActiviteController;
-import activite.ActiviteView;
 import personne.Personne;
 import tarif.TarifController;
-import tarif.TarifView;
 
 public class InscriptionController {
     private final Inscription model;
@@ -35,6 +32,7 @@ public class InscriptionController {
 
         int choix;
         do {
+            view.afficherListe(model.getEleves());
             view.afficherMenu();
             choix = view.lireChoix();
 

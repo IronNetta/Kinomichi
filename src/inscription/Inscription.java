@@ -16,6 +16,10 @@ public class Inscription {
         sauvegarder();
     }
 
+    public List<Personne> getEleves() {
+        return inscrit;
+    }
+
     public List<Personne> listerEleves() {
     return new ArrayList<>(inscrit);
 }

@@ -3,12 +3,26 @@ package inscription;
 import activite.Activite;
 import activite.ActiviteController;
 import personne.Personne;
+import utils.IPrintList;
+import utils.Lecture;
 
+import java.util.List;
 import java.util.Scanner;
 
-public class InscriptionView {
+public class InscriptionView extends Lecture implements IPrintList<Personne> {
     private static final String EMAIL_REGEX = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
     private final Scanner scanner = new Scanner(System.in);
+
+    public void afficherListe(List list) {
+        if (list.isEmpty()) {
+            System.out.println("Aucun élève disponible.");
+        } else {
+            System.out.println("Liste des élèves :");
+            for (Object item : list) {
+                System.out.println(item);
+            }
+        }
+    }
 
     public void afficherMenu() {
         System.out.println("\n--- Menu Gestion des eleves ---");
@@ -24,15 +38,6 @@ public class InscriptionView {
         System.out.print("Votre choix : ");
     }
 
-    public int lireChoix() {
-        while (true) {
-            try {
-                return Integer.parseInt(scanner.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("Veuillez entrer un nombre valide.");
-            }
-        }
-    }
 
     public Personne lireNouvelEleve(ActiviteController activiteController) {
         System.out.print("Nom : ");
@@ -115,10 +120,10 @@ public class InscriptionView {
     }
 
     public boolean lireBoolean(String message) {
-        System.out.print(message + " (oui/non) : ");
         return scanner.nextLine().equalsIgnoreCase("oui");
     }
 
     public void afficherMenuModificationEleve(Personne eleve) {
     }
+
 }

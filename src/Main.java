@@ -4,8 +4,10 @@ import activite.ActiviteView;
 import inscription.Inscription;
 import inscription.InscriptionController;
 import inscription.InscriptionView;
+import personne.Personne;
 import tarif.TarifController;
 import tarif.TarifView;
+import utils.IPrintList;
 
 public class Main {
     public static void main(String[] args) {
@@ -20,6 +22,8 @@ public class Main {
         InscriptionView inscriptionView = new InscriptionView();
         InscriptionController inscriptionController = new InscriptionController(inscriptionModel, inscriptionView,
                 activiteController, tarifController);
+
+
 
         inscriptionController.demarrer();
     }

@@ -69,7 +69,7 @@ public class ActiviteController {
                 }
                 case 2 -> {
                     List<Activite> activites = listerActivites();
-                    view.afficherActivites(activites);
+                    view.afficherListe(activites);
                 }
                 case 3 -> {
                     String nom = view.lireTexte("Nom de l'activité à modifier : ");

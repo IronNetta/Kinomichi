@@ -1,18 +1,21 @@
 package activite;
 
+import utils.IPrintList;
+import utils.Lecture;
+
 import java.util.List;
 import java.util.Scanner;
 
-public class ActiviteView {
+public class ActiviteView extends Lecture implements IPrintList<Activite> {
     private final Scanner scanner = new Scanner(System.in);
 
-    public void afficherActivites(List<Activite> activites) {
-        if (activites.isEmpty()) {
+    public void afficherListe(List list) {
+        if (list.isEmpty()) {
             System.out.println("Aucune activité disponible.");
         } else {
             System.out.println("Liste des activités :");
-            for (Activite activite : activites) {
-                System.out.println(activite);
+            for (Object item : list) {
+                System.out.println(item);
             }
         }
     }
@@ -23,12 +26,10 @@ public class ActiviteView {
         System.out.print("Durée en heures : ");
         int heuresStage = scanner.nextInt();
         scanner.nextLine();
-        System.out.print("Logement nécessaire (oui/non) : ");
-        boolean logement = scanner.nextLine().equalsIgnoreCase("oui");
-        System.out.print("Repas du soir inclus (oui/non) : ");
-        boolean repasSoir = scanner.nextLine().equalsIgnoreCase("oui");
-        System.out.print("Activité le week-end (oui/non) : ");
-        boolean estWeekend = scanner.nextLine().equalsIgnoreCase("oui");
+        boolean logement = lireBooleen("Inclut un logement ? (oui/non) :");
+        boolean repasSoir = lireBooleen("Inclut un souper ? (oui/non) : ");
+        boolean estWeekend = lireBooleen("Est-ce un stage de weekend ? (oui/non) : ");
+
 
         return new Activite(nom, heuresStage, logement, repasSoir, estWeekend);
     }
@@ -48,16 +49,6 @@ public class ActiviteView {
         System.out.print("Votre choix : ");
     }
 
-    public int lireChoix() {
-        while (true) {
-            try {
-                return Integer.parseInt(scanner.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("Veuillez entrer un nombre valide.");
-            }
-        }
-    }
-
     public void afficherMessage(String message) {
         System.out.println(message);
     }
@@ -67,19 +58,11 @@ public class ActiviteView {
         String nom = lireTexte();
         System.out.print("Durée (en heures) : ");
         int duree = lireEntier();
-        System.out.print("Inclut un logement ? (oui/non) : ");
-        boolean logement = lireBooleen();
-        System.out.print("Inclut un souper ? (oui/non) : ");
-        boolean souper = lireBooleen();
-        System.out.print("Est-ce un stage de weekend ? (oui/non) : ");
-        boolean weekend = lireBooleen();
+        boolean logement = lireBooleen("Inclut un logement ? (oui/non) :");
+        boolean souper = lireBooleen("Inclut un souper ? (oui/non) : ");
+        boolean weekend = lireBooleen("Est-ce un stage de weekend ? (oui/non) : ");
 
         return new Activite(nom, duree, logement, souper, weekend);
-    }
-
-    public String lireTexte() {
-        Scanner scanner = new Scanner(System.in);
-        return scanner.nextLine();
     }
 
     public String lireTexte(String prompt) {
@@ -88,7 +71,6 @@ public class ActiviteView {
     }
 
     public int lireEntier() {
-        Scanner scanner = new Scanner(System.in);
         while (!scanner.hasNextInt()) {
             System.out.print("Veuillez entrer un entier valide : ");
             scanner.next();
@@ -96,9 +78,5 @@ public class ActiviteView {
         return scanner.nextInt();
     }
 
-    public boolean lireBooleen() {
-        String reponse = lireTexte();
-        return reponse.equalsIgnoreCase("oui");
-    }
 }
 
