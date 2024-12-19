@@ -121,5 +121,5 @@ Pour exécuter l'application :
 - **Développeur principal** : De Laet Sebastien
 
 ## Licence
-Ce projet est sous licence [Nom de la licence, ex: MIT].
+Ce projet est sous licence [LICENCE].
 
